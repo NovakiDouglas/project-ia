@@ -1,5 +1,23 @@
 credenciais-aws.txt
+# Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
+
+# Terraform providers
+terraform-provider-*
+
+# Logs
+*.log
+
+# Python
+__pycache__/
+*.pyc
+
+# Docker
 *.env
+
+# Outros arquivos sensíveis
 *.pem
 *.key
-
