@@ -1,11 +1,10 @@
 credenciais-aws.txt
+
 # Terraform
 .terraform/
 terraform.tfstate
 terraform.tfstate.backup
 .terraform.lock.hcl
-
-# Terraform providers
 terraform-provider-*
 
 # Logs
@@ -14,6 +13,8 @@ terraform-provider-*
 # Python
 __pycache__/
 *.pyc
+venv/
+.env/
 
 # Docker
 *.env

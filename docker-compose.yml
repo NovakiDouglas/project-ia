@@ -1,8 +1,12 @@
-# docker-compose.yml
-version: '3.8'
-
 services:
   api:
-    build: ./api
+    build:
+      context: app
+      dockerfile: Dockerfile
     ports:
+#      - "5000:5000"
       - "5001:5000"
+
+    volumes:
+      - ./models:/models  # Facilita atualizar modelos sem rebuild, opcional
+    restart: always

@@ -8,7 +8,7 @@ resource "aws_instance" "api_server" {
   user_data = <<-EOF
               #!/bin/bash
               sudo apt update
-              sudo apt install -y docker.io git
+              sudo apt install -y docker.io docker-compose git
               sudo systemctl start docker
               sudo systemctl enable docker
               git clone https://github.com/NovakiDouglas/project-ia.git

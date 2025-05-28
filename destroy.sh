@@ -1,12 +1,9 @@
 #!/bin/bash
 
-echo "🚀 Iniciando deploy com Terraform..."
+echo "⚠️ Destruindo infraestrutura com Terraform..."
 
 cd terraform
 
-terraform init
-terraform plan
-terraform apply -auto-approve
+terraform destroy -auto-approve
 
-echo "✅ Deploy finalizado!"
-
+echo "✅ Infraestrutura destruída com sucesso!"
