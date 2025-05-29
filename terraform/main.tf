@@ -9,25 +9,26 @@ resource "aws_instance" "api_server" {
               #!/bin/bash
               yum update -y
 
-              # Habilita e instala Docker
+              # Instala Docker e Git
               amazon-linux-extras enable docker
               yum install -y docker git
 
-              # Inicia o serviço Docker
+              # Inicia o Docker e adiciona ec2-user ao grupo
               systemctl start docker
               systemctl enable docker
-
-              # Adiciona ec2-user ao grupo docker
               usermod -aG docker ec2-user
 
               # Instala Docker Compose
-              curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              curl -L "https://github.com/docker/compose/releases/download/v2.24.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               chmod +x /usr/local/bin/docker-compose
               ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
-              # Faz clone e roda o container
+              # Clona o projeto (ajuste se for repositório privado)
               su - ec2-user -c "git clone https://github.com/NovakiDouglas/project-ia.git"
-              su - ec2-user -c "cd project-ia && docker-compose up -d"
+
+              # Sobe os serviços com docker-compose
+              su - ec2-user -c "cd project-ia && docker-compose down -v || true"
+              su - ec2-user -c "cd project-ia && docker-compose up -d --build"
               EOF
 
   tags = {

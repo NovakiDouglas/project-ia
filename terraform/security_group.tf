@@ -1,21 +1,29 @@
 resource "aws_security_group" "api_sg" {
   name        = "api-sg"
-  description = "Allow inbound traffic on port 5000"
+  description = "Allow inbound traffic for API and model serving"
 
   ingress {
-    description = "Allow HTTP API traffic"
+    description = "Allow API (Flask) traffic"
     from_port   = 5000
     to_port     = 5000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-    ingress {
-    description = "Allow SSH"
+  ingress {
+    description = "Allow TensorFlow Serving traffic"
+    from_port   = 8501
+    to_port     = 8501
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Allow SSH access"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # ou seu IP público /32
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {

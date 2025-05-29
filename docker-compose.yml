@@ -1,12 +1,22 @@
+version: "3.8"
+
 services:
   api:
     build:
-      context: app
-      dockerfile: Dockerfile
+      context: ./app
     ports:
       - "5000:5000"
 #      - "5001:5000"
+    environment:
+      - MODEL_URL=http://model-server:8501/v1/models/model:predict
+    depends_on:
+      - model-server
 
+  model-server:
+    image: tensorflow/serving
+    ports:
+      - "8501:8501"
     volumes:
-      - ./models:/models  # Facilita atualizar modelos sem rebuild, opcional
-    restart: always
+      - ./model/v1:/models/model
+    environment:
+      - MODEL_NAME=model

@@ -1,13 +1,18 @@
-import joblib
+import requests
 import os
+import numpy as np
+
+MODEL_URL = os.getenv("MODEL_URL", "http://localhost:8501/v1/models/model:predict")
 
 def load_model(version='v1'):
-    model_path = f"models/{version}/modelo.pkl"
-    if os.path.exists(model_path):
-        return joblib.load(model_path)
-    else:
-        return None
+    return True  # Sem carregamento local, container separado cuida disso
 
-def predict_with_model(model, input_value):
-    # Ajuste: usa float para suportar valores mais gerais
-    return model.predict([[float(input_value)]])
+def predict_with_model(_, input_value):
+    try:
+        value = float(input_value)
+        response = requests.post(MODEL_URL, json={"instances": [[value]]})
+        response.raise_for_status()
+        prediction = response.json()["predictions"]
+        return np.array(prediction)
+    except Exception as e:
+        raise RuntimeError(f"Erro ao obter predição: {e}")
