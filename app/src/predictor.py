@@ -7,10 +7,10 @@ MODEL_URL = os.getenv("MODEL_URL", "http://localhost:8501/v1/models/model:predic
 def load_model(version='v1'):
     return True  # Sem carregamento local, container separado cuida disso
 
-def predict_with_model(_, input_value):
+def predict_with_model(_, instances):
     try:
-        value = float(input_value)
-        response = requests.post(MODEL_URL, json={"instances": [[value]]})
+        parsed_instances = [[float(val) for val in row] for row in instances]
+        response = requests.post(MODEL_URL, json={"instances": parsed_instances})
         response.raise_for_status()
         prediction = response.json()["predictions"]
         return np.array(prediction)

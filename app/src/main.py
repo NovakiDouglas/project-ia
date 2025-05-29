@@ -3,21 +3,25 @@ from predictor import load_model, predict_with_model
 
 app = Flask(__name__)
 
-@app.route('/predict', methods=['GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
-    id = request.args.get('id')
-    version = request.args.get('version', 'v1')  # Default para v1
+    version = request.args.get('version', 'v1')  # suporte opcional para versão
 
-    if not id:
-        abort(400, description="id is required")
+    try:
+        content = request.get_json()
+        if not content or 'instances' not in content:
+            abort(400, description="O JSON precisa conter a chave 'instances'.")
 
-    model = load_model(version)
-    if model is None:
-        return jsonify({'success': False, 'error': f'Modelo versão {version} não encontrado'}), 503
+        instances = content['instances']
+        model = load_model(version)
+        if model is None:
+            return jsonify({'success': False, 'error': f'Modelo versão {version} não encontrado'}), 503
 
-    result = predict_with_model(model, id)
+        result = predict_with_model(model, instances)
+        return jsonify({'success': True, 'prediction': result.tolist(), 'version': version})
 
-    return jsonify({'success': True, 'prediction': result.tolist(), 'version': version})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
