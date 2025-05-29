@@ -18,7 +18,7 @@ services:
     ports:
       - "8501:8501"
     volumes:
-      - ./model/v1:/models/model
+      - ./app/model:/models/model/1
     environment:
       - MODEL_NAME=model
     networks:
