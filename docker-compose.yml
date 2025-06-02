@@ -7,20 +7,33 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - MODEL_URL=http://model-server:8501/v1/models/model:predict
+      - MODEL_PLUG_URL=http://model-server-plug:8501/v1/models/plug:predict
+      - MODEL_LAMPADA_URL=http://model-server-lampada:8502/v1/models/lampada:predict
     depends_on:
-      - model-server
+      - model-server-plug
+      - model-server-lampada
     networks:
       - ia_net
 
-  model-server:
+  model-server-plug:
     image: tensorflow/serving
     ports:
       - "8501:8501"
     volumes:
-      - ./model:/models/model/1
+      - ./model-plug:/models/plug/1
     environment:
-      - MODEL_NAME=model
+      - MODEL_NAME=plug
+    networks:
+      - ia_net
+
+  model-server-lampada:
+    image: tensorflow/serving
+    ports:
+      - "8502:8501"
+    volumes:
+      - ./model-lampada:/models/lampada/1
+    environment:
+      - MODEL_NAME=lampada
     networks:
       - ia_net
 

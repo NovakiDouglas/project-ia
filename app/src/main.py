@@ -1,25 +1,31 @@
 from flask import Flask, request, jsonify, abort
-from predictor import load_model, predict_with_model
+from predictor import predict_plug, predict_lampada
 
 app = Flask(__name__)
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    version = request.args.get('version', 'v1')  # suporte opcional para versão
-
+@app.route('/predict/plug', methods=['POST'])
+def predict_endpoint_plug():
+    version = request.args.get('version')
     try:
         content = request.get_json()
         if not content or 'instances' not in content:
-            abort(400, description="O JSON precisa conter a chave 'instances'.")
-
+            abort(400, description="JSON precisa conter a chave 'instances'.")
         instances = content['instances']
-        model = load_model(version)
-        if model is None:
-            return jsonify({'success': False, 'error': f'Modelo versão {version} não encontrado'}), 503
+        result = predict_plug(instances, version)
+        return jsonify({'success': True, 'prediction': result.tolist(), 'version': version or 'latest'})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
-        result = predict_with_model(model, instances)
-        return jsonify({'success': True, 'prediction': result.tolist(), 'version': version})
-
+@app.route('/predict/lampada', methods=['POST'])
+def predict_endpoint_lampada():
+    version = request.args.get('version')
+    try:
+        content = request.get_json()
+        if not content or 'instances' not in content:
+            abort(400, description="JSON precisa conter a chave 'instances'.")
+        instances = content['instances']
+        result = predict_lampada(instances, version)
+        return jsonify({'success': True, 'prediction': result.tolist(), 'version': version or 'latest'})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 

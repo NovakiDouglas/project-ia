@@ -1,18 +1,19 @@
 import requests
-import os
 import numpy as np
 
-MODEL_URL = os.getenv("MODEL_URL", "http://localhost:8501/v1/models/model:predict")
-
-def load_model(version='v1'):
-    return True  # Sem carregamento local, container separado cuida disso
-
-def predict_with_model(_, instances):
+def predict_model(instances, model_name, port="8501", version=None):
     try:
-        parsed_instances = [[float(val) for val in row] for row in instances]
-        response = requests.post(MODEL_URL, json={"instances": parsed_instances})
+        parsed = [[float(val) for val in row] for row in instances]
+        version_path = f"/versions/{version}" if version else ""
+        url = f"http://{model_name}:{port}/v1/models/{model_name}{version_path}:predict"
+        response = requests.post(url, json={"instances": parsed})
         response.raise_for_status()
-        prediction = response.json()["predictions"]
-        return np.array(prediction)
+        return np.array(response.json()["predictions"])
     except Exception as e:
-        raise RuntimeError(f"Erro ao obter predição: {e}")
+        raise RuntimeError(f"Erro na predição do modelo '{model_name}': {e}")
+
+def predict_plug(instances, version=None):
+    return predict_model(instances, model_name="model-lampada-server-plug", port="8501", version=version)
+
+def predict_lampada(instances, version=None):
+    return predict_model(instances, model_name="model-lampada-server-lampada", port="8502", version=version)
