@@ -7,8 +7,8 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - MODEL_PLUG_URL=http://model-server-plug:8501/v1/models/plug:predict
-      - MODEL_LAMPADA_URL=http://model-server-lampada:8502/v1/models/lampada:predict
+      - MODEL_PLUG_URL=http://model-server-plug:8501/v1/models/plug
+      - MODEL_LAMPADA_URL=http://model-server-lampada:8501/v1/models/lampada
     depends_on:
       - model-server-plug
       - model-server-lampada
@@ -20,7 +20,7 @@ services:
     ports:
       - "8501:8501"
     volumes:
-      - ./model-plug:/models/plug/1
+      - ./model-plug:/models/plug
     environment:
       - MODEL_NAME=plug
     networks:
@@ -31,7 +31,7 @@ services:
     ports:
       - "8502:8501"
     volumes:
-      - ./model-lampada:/models/lampada/1
+      - ./model-lampada:/models/lampada
     environment:
       - MODEL_NAME=lampada
     networks:
