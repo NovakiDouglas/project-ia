@@ -9,11 +9,15 @@ services:
     environment:
       - MODEL_PLUG_URL=http://model-server-plug:8501/v1/models/plug
       - MODEL_LAMPADA_URL=http://model-server-lampada:8501/v1/models/lampada
+      - AWS_REGION=us-east-1
     depends_on:
       - model-server-plug
       - model-server-lampada
     networks:
       - ia_net
+    # Se quiser usar as credenciais locais da AWS:
+    # volumes:
+    #   - ~/.aws:/root/.aws:ro
 
   model-server-plug:
     image: tensorflow/serving

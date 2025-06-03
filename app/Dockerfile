@@ -1,6 +1,6 @@
 FROM python:3.9-slim
 
-# Instala dependências
+# Instala dependências do sistema
 WORKDIR /app
 COPY requirements.txt .
 RUN apt-get update && apt-get install -y \
@@ -11,15 +11,14 @@ RUN apt-get update && apt-get install -y \
         libxext6 \
         && rm -rf /var/lib/apt/lists/*
 
+# Instala dependências Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia a aplicação e modelos
-COPY src/main.py .
-COPY src/predictor.py .
-#COPY models/ models/
+# Copia o código fonte
+COPY src/ .
 
-# Expondo a porta
+# Expõe a porta
 EXPOSE 5000
 
-# Comando para iniciar a aplicação
+# Comando de inicialização
 CMD ["python", "main.py"]

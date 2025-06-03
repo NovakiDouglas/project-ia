@@ -1,147 +1,121 @@
-
-# Meu Projeto IA
+# Projeto IA - Predição com Modelos Plug e Lâmpada
 
 ## ✅ Descrição
 
-API simples com Flask que permite realizar predições utilizando modelos de IA versionados.  
-O modelo pode ser atualizado facilmente adicionando novas versões à pasta `models/`.  
+API em Flask para realizar predições usando dois modelos distintos:
 
-Suporte a múltiplas versões com parâmetro `version`.  
-Exemplo: `/predict?id=123&version=v1`
+- Modelo **Plug** (consumo de dispositivos plugados)
+- Modelo **Lâmpada** (consumo de iluminação)
+
+Cada modelo é versionado e servido de forma independente via **TensorFlow Serving**.  
+A API suporta requisições via POST e permite indicar qual versão do modelo utilizar.  
 
 ---
 
-## ✅ Como rodar local com Docker
+## ✅ Endpoints
 
-1. **Build e execução**:
+- `POST /predict/plug`  
+- `POST /predict/lampada`  
+
+### Corpo da requisição:
+```json
+{
+  "instances": [
+    [2, 123.4, 110.0, 15.2],
+    [5, 130.0, 129.0, 8.3]
+  ],
+  "version": "2"  // opcional. Se não enviado, utiliza "latest"
+}
+```
+
+---
+
+## ✅ Como rodar localmente com Docker
 
 ```bash
 docker-compose up --build
 ```
 
-2. **Acessar a API**:  
+Acesse em:
 
-- Versão padrão (v1):  
-  [http://localhost:5000/predict?id=123](http://localhost:5000/predict?id=123)
-
-- Versão específica:  
-  [http://localhost:5000/predict?id=123&version=v2](http://localhost:5000/predict?id=123&version=v2)
+- [http://localhost:5000/predict/plug](http://localhost:5000/predict/plug)
+- [http://localhost:5000/predict/lampada](http://localhost:5000/predict/lampada)
 
 ---
 
-## ✅ Como rodar com Makefile (opcional)
+## ✅ Estrutura de Pastas para os Modelos
 
-1. **Buildar a imagem**:
+Cada modelo fica em sua pasta, com subpastas numeradas:
 
-```bash
-make build
+```
+model-plug/
+└── 2/
+    ├── saved_model.pb
+    └── variables/
+
+model-lampada/
+└── 1/
+    ├── saved_model.pb
+    └── variables/
 ```
 
-2. **Subir o container**:
-
-```bash
-make up
-```
-
-3. **Testar a API**:
-
-```bash
-make test
-```
-
-4. **Parar a aplicação**:
-
-```bash
-make down
-```
+> ⚠️ O TensorFlow Serving exige que cada versão fique dentro de uma pasta numerada (ex: `/1/`, `/2/`).
 
 ---
 
-## ✅ Estrutura de modelos
+## ✅ Como testar a API
 
-Os modelos devem estar organizados da seguinte forma:
-
-```
-models/
-├── v1/
-│   └── modelo.pkl
-├── v2/
-│   └── modelo.pkl
-└── ...
+```bash
+python app/src/test_predict.py
 ```
 
-- A versão padrão é **`v1`**.  
-- Para carregar outra versão, use o parâmetro: `?version=v2`.
+Esse script testa:
+- Versão mais recente de cada modelo
+- Versões específicas válidas e inválidas
+- Formato de resposta e tratamento de erro
 
 ---
 
-## ✅ Como provisionar na AWS
+## ✅ Provisionar na AWS com Terraform
 
-1. **Configure AWS CLI**:
+1. Configure sua AWS:
 
 ```bash
 aws configure
 ```
 
-2. **Execute o Terraform**:
+2. Execute o provisionamento:
 
 ```bash
 cd terraform
 terraform init
-terraform plan
 terraform apply
 ```
 
-3. **Veja o IP público no output** e acesse:  
+3. Acesse no IP público:
 
 ```bash
-http://IP_PUBLICO:5000/predict?id=123
-```
-
-Ou com versão:
-
-```bash
-http://IP_PUBLICO:5000/predict?id=123&version=v2
+http://<IP_PUBLICO>:5000/predict/plug
 ```
 
 ---
 
-## ✅ Deploy automático
+## ✅ Atualizar um modelo
 
-O provisionamento com **Terraform** já executa:
+1. Adicione a nova versão dentro da pasta correta (`model-plug/3/`, `model-lampada/2/` etc)
+2. Faça `commit` e `push` para o repositório
+3. Rode novamente `docker-compose up -d --build` ou `terraform apply`
 
-- Instalação do Docker e Docker Compose
-- Clonagem do repositório
-- Execução automática da aplicação via `docker-compose up -d`
-
----
-
-## ✅ Como atualizar o modelo
-
-1. Adicione a nova versão na pasta `models/`  
-2. Commit e push para o repositório  
-3. Execute:
-
-```bash
-make deploy
-```
-
-ou
-
-```bash
-cd terraform && terraform apply
-```
-
-✅ O modelo será carregado automaticamente na nova versão da aplicação.
+> ✅ A versão nova será carregada automaticamente pelo TensorFlow Serving
 
 ---
 
-## ✅ Tecnologias utilizadas
+## ✅ Tecnologias Utilizadas
 
 - Python 3.9
 - Flask
-- Docker
-- Docker Compose
+- Docker / Docker Compose
+- TensorFlow Serving
 - Terraform
 - AWS EC2
 
@@ -149,5 +123,5 @@ cd terraform && terraform apply
 
 ## ✅ Autor
 
-- **Novaki**
-- Contato: [novakiart@gmail.com](mailto:novakiart@gmail.com)
+**Novaki**  
+📧 [novakiart@gmail.com](mailto:novakiart@gmail.com)
