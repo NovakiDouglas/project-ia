@@ -2,7 +2,7 @@ import requests
 import json
 
 # ✅ URL base da API
-API_URL = "http://54.160.152.67:5000"  # Altere aqui se necessário
+API_URL = "http://54.196.249.81:5000"  # Altere aqui se necessário
 
 # ✅ API Key atual (pode vir do Secrets Manager no projeto principal)
 API_KEY = "SUA_API_KEY_AQUI"

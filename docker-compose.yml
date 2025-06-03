@@ -7,17 +7,17 @@ services:
     ports:
       - "5000:5000"
     environment:
+      - ENV=dev                     # 👈 Ambiente atual (mude para prod se necessário)
+      - AWS_REGION=us-east-1
       - MODEL_PLUG_URL=http://model-server-plug:8501/v1/models/plug
       - MODEL_LAMPADA_URL=http://model-server-lampada:8501/v1/models/lampada
-      - AWS_REGION=us-east-1
     depends_on:
       - model-server-plug
       - model-server-lampada
     networks:
       - ia_net
-    # Se quiser usar as credenciais locais da AWS:
     # volumes:
-    #   - ~/.aws:/root/.aws:ro
+    #   - ~/.aws:/root/.aws:ro  # opcional para testes locais com credenciais
 
   model-server-plug:
     image: tensorflow/serving

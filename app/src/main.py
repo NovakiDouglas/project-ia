@@ -1,30 +1,30 @@
-from flask import Flask, request, jsonify, abort
+import os
 import boto3
 import json
 from datetime import datetime, timedelta, timezone
+from flask import Flask, request, jsonify, abort
 from predictor import predict_plug, predict_lampada
 
 app = Flask(__name__)
 
-SECRET_NAME = "api-key-secret"  # Nome do secret no Secrets Manager
-REGION_NAME = "us-east-1"       # Região da AWS
+# Ambiente (dev, prod)
+ENV = os.getenv("ENV", "dev")
+SECRET_NAME = f"api_key_rotation-{ENV}"
+REGION_NAME = os.getenv("AWS_REGION", "us-east-1")
 
 def get_api_keys():
     client = boto3.client("secretsmanager", region_name=REGION_NAME)
     response = client.get_secret_value(SecretId=SECRET_NAME)
-    secret = json.loads(response["SecretString"])
-    return secret
+    return json.loads(response["SecretString"])
 
 def is_valid_key(key: str) -> bool:
     secret = get_api_keys()
     now = datetime.now(timezone.utc)
 
-    # Valida chave atual
-    if key == secret["current"]:
+    if key == secret.get("current"):
         return True
 
-    # Valida chave anterior com expiração de 24h
-    if key == secret["previous"]:
+    if key == secret.get("previous"):
         last_rotation = datetime.fromisoformat(secret["last_rotation"].replace("Z", "+00:00"))
         if now <= last_rotation + timedelta(days=1):
             return True
