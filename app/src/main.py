@@ -45,8 +45,12 @@ def predict_endpoint_plug():
         if not content or 'instances' not in content:
             abort(400, description="JSON precisa conter a chave 'instances'.")
         instances = content['instances']
-        result = predict_plug(instances, version)
-        return jsonify({'success': True, 'prediction': result.tolist(), 'version': version or 'latest'})
+        result, used_version = predict_plug(instances, version)
+        return jsonify({
+            'success': True,
+            'prediction': result.tolist(),
+            'version': used_version
+        })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
@@ -59,8 +63,12 @@ def predict_endpoint_lampada():
         if not content or 'instances' not in content:
             abort(400, description="JSON precisa conter a chave 'instances'.")
         instances = content['instances']
-        result = predict_lampada(instances, version)
-        return jsonify({'success': True, 'prediction': result.tolist(), 'version': version or 'latest'})
+        result, used_version = predict_lampada(instances, version)
+        return jsonify({
+            'success': True,
+            'prediction': result.tolist(),
+            'version': used_version
+        })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 

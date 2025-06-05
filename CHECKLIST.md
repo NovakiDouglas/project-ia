@@ -1,47 +1,35 @@
+# ✅ Checklist Realista para Evolução do Projeto
 
-# ✅ Checklist — Próximos passos para o futuro do projeto
+## 1. Segurança (essencial)
+- [x] Proteção por API Key (via Secrets Manager)
+- [ ] Adicionar HTTPS com certificado (SSL)
+- [ ] Habilitar CORS apenas para origens confiáveis
 
-## ✅ 1. Infraestrutura
+## 2. Documentação
+- [ ] Escrever README com exemplos de uso da API
+- [ ] Criar Swagger/OpenAPI (pode ser com Flask-RESTX ou migrar p/ FastAPI depois)
 
-- [x] Elastic IP — **Já feito!**
-- [ ] Criar Auto Scaling Group (ASG)
-- [ ] Configurar Application Load Balancer (ALB)
-- [ ] Migrar para ECS Fargate ou EKS
+## 3. Monitoramento e Confiabilidade
+- [ ] Adicionar `/health` endpoint para health checks
+- [ ] Configurar CloudWatch Logs (opcional)
 
-## ✅ 2. Aplicação e Deploy
+## 4. Deploy e Infra
+- [x] Docker Compose estruturado (multi-container)
+- [x] Elastic IP
+- [x] Deploy com Terraform automatizado (dev e prod)
+- [x] EC2 com IAM para Secrets
+- [ ] Melhorar logging com timestamps e erros claros
 
-- [ ] Rodar Flask com Gunicorn ou uWSGI
-- [ ] Considerar migração para FastAPI
-- [ ] Criar CI/CD com GitHub Actions ou GitLab CI
+## 5. Testes
+- [x] Script local de testes automatizados (`test_predict.py`)
+- [ ] Testes unitários por endpoint com dados mockados
 
-## ✅ 3. Rede e Segurança
+## 6. Organização e Manutenção
+- [x] Separação clara entre modelos (`model-plug/`, `model-lampada/`)
+- [x] Versionamento de modelos por subpasta `/1`, `/2`
+- [ ] Criar script para empacotar novos modelos (`model_upload.sh`)
 
-- [ ] Configurar domínio customizado
-- [ ] Adicionar certificado SSL (HTTPS)
-- [ ] Configurar Web Application Firewall (WAF)
-- [ ] Revisar Security Groups
-
-## ✅ 4. Observabilidade e Monitoramento
-
-- [ ] Configurar CloudWatch Logs
-- [ ] Configurar CloudWatch Alarms
-- [ ] Implementar Health Checks
-
-## ✅ 5. Performance e Custo
-
-- [ ] Habilitar Auto Scaling
-- [ ] Revisar tipos de instância conforme a demanda
-- [ ] Analisar custo-benefício de migrar para ECS, Lambda ou Lightsail
-
-## ✅ 6. Melhoria Contínua
-
-- [ ] Implementar testes automatizados (unitários e integração)
-- [ ] Documentar a API (Swagger, Flask-RESTX ou FastAPI)
-- [ ] Criar controle de versões da API (/v1, /v2)
-- [ ] Estruturar deploy de modelos de IA (via Git, S3 ou SageMaker)
-
-## ✅ 7. Segurança de Dados e Modelos
-
-- [ ] Armazenar modelos de IA no S3
-- [ ] Criptografar tráfego com HTTPS
-- [ ] Implementar autenticação na API (JWT, API Keys)
+## 7. Futuro (pode ser adiado)
+- [ ] Migrar para ECS Fargate (quando escalar horizontalmente)
+- [ ] Habilitar ALB + Auto Scaling Group
+- [ ] Considerar FastAPI para performance e documentação embutida

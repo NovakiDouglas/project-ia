@@ -2,10 +2,10 @@ import requests
 import json
 
 # ✅ URL base da API
-API_URL = "http://54.196.249.81:5000"  # Altere aqui se necessário
+API_URL = "http://54.159.76.94:5000"  # Altere aqui se necessário
 
 # ✅ API Key atual (pode vir do Secrets Manager no projeto principal)
-API_KEY = "SUA_API_KEY_AQUI"
+API_KEY = "r_VScYSlXJ2dyIweTahbHg0RC-kKtzOqEx5PnFgQP14"
 
 def test_predict(endpoint: str, instances, version=None):
     url = f"{API_URL}/predict/{endpoint}"

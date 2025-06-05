@@ -28,6 +28,9 @@ A API suporta requisições via POST e permite indicar qual versão do modelo ut
 }
 ```
 
+
+[12,12,12,12,12,12,12,12,12,12,12,12] => [12,12,12,12,12,12,12]
+
 ---
 
 ## ✅ Como rodar localmente com Docker
