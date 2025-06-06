@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   api:
     build:
@@ -10,7 +11,7 @@ services:
       - ENV=dev
       - AWS_REGION=us-east-1
       - MODEL_PLUG_URL=http://model-server-plug:8501/v1/models/plug
-      - MODEL_LAMP_URL=http://model-server-lamp:8502/v1/models/lamp
+      - MODEL_LAMP_URL=http://model-server-lamp:8501/v1/models/lamp
     depends_on:
       - model-server-plug
       - model-server-lamp
@@ -20,7 +21,7 @@ services:
   model-server-plug:
     image: tensorflow/serving
     ports:
-      - "8501:8501"
+      - "8501:8501"  # expõe porta 8501 para acesso ao modelo plug
     volumes:
       - ./prediction/app/models/plug:/models/plug
     environment:
@@ -31,7 +32,7 @@ services:
   model-server-lamp:
     image: tensorflow/serving
     ports:
-      - "8502:8501"
+      - "8502:8501"  # expõe 8502 no host, mapeado para 8501 no container
     volumes:
       - ./prediction/app/models/lamp:/models/lamp
     environment:

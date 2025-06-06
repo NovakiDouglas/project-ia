@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("predictor")
 
 MODEL_PLUG_BASE = os.getenv("MODEL_PLUG_URL", "http://model-server-plug:8501/v1/models/plug")
-MODEL_LAMP_BASE = os.getenv("MODEL_LAMP_URL", "http://model-server-lamp:8502/v1/models/lamp")
+MODEL_LAMP_BASE = os.getenv("MODEL_LAMP_URL", "http://model-server-lamp:8501/v1/models/lamp")
 
 # Fator oficial de emissão (MCTI, 2024): 42.6 kg CO₂ por MWh
 EMISSION_FACTOR_KG_PER_MWH = 42.6
