@@ -3,9 +3,9 @@ resource "aws_security_group" "api_sg" {
   description = "Allow inbound traffic for API and model serving"
 
   ingress {
-    description = "Allow API (Flask) traffic"
-    from_port   = 5000
-    to_port     = 5000
+    description = "Allow FastAPI traffic"
+    from_port   = 8000
+    to_port     = 8000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -13,7 +13,7 @@ resource "aws_security_group" "api_sg" {
   ingress {
     description = "Allow TensorFlow Serving traffic"
     from_port   = 8501
-    to_port     = 8501
+    to_port     = 8502
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

@@ -64,10 +64,10 @@ async def predict_endpoint_plug(request: Request, content: PredictionRequest, ve
 
 
 @app.post("/predict/lamp")
-async def predict_endpoint_lampada(request: Request, content: PredictionRequest, version: str = None):
+async def predict_endpoint_lamp(request: Request, content: PredictionRequest, version: str = None):
     require_api_key(request)
     try:
-        prediction, carbon_footprint, used_version = predict_lampada(content.instances, version)
+        prediction, carbon_footprint, used_version = predict_lamp(content.instances, version)
         return {
             'success': True,
             'prediction': prediction,

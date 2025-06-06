@@ -2,14 +2,14 @@ version: "3.8"
 services:
   api:
     build:
-      context: ./app
+      context: ./prediction/app
     ports:
       - "8000:8000"
     environment:
       - ENV=dev
       - AWS_REGION=us-east-1
       - MODEL_PLUG_URL=http://model-server-plug:8501/v1/models/plug
-      - MODEL_LAMP_URL=http://model-server-lamp:8501/v1/models/lamp
+      - MODEL_LAMP_URL=http://model-server-lamp:8502/v1/models/lamp
     depends_on:
       - model-server-plug
       - model-server-lamp
@@ -21,7 +21,7 @@ services:
     ports:
       - "8501:8501"
     volumes:
-      - ./app/models/plug:/models/plug
+      - ./prediction/app/models/plug:/models/plug
     environment:
       - MODEL_NAME=plug
     networks:
@@ -32,7 +32,7 @@ services:
     ports:
       - "8502:8501"
     volumes:
-      - ./app/models/lamp:/models/lamp
+      - ./prediction/app/models/lamp:/models/lamp
     environment:
       - MODEL_NAME=lamp
     networks:

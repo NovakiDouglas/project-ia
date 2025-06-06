@@ -20,10 +20,8 @@ ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 # Clona o repositório
 su - ec2-user -c "git clone https://github.com/NovakiDouglas/project-ia.git"
 
-# Injeta ENV como variável para docker-compose
-cat <<EOF > /home/ec2-user/project-ia/.env
-ENV=${env}
-EOF
+# Injeta ENV fixo como variável para docker-compose (apenas ajuste necessário)
+echo "ENV=dev" > /home/ec2-user/project-ia/.env
 
 # Sobe os serviços
 su - ec2-user -c "cd project-ia && docker-compose down -v || true"
