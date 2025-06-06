@@ -1,7 +1,8 @@
 FROM python:3.9-slim
 
 WORKDIR /app
-COPY app/requirements.txt ./
+
+COPY prediction/app/requirements.txt ./
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -12,6 +13,8 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/* && \
     pip install --no-cache-dir -r requirements.txt
 
-COPY app/ ./
+COPY prediction/app/ ./
+
 EXPOSE 8000
+
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
