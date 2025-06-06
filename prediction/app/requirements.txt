@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+tensorflow
+boto3
+requests
+numpy

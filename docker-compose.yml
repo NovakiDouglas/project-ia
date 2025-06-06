@@ -1,43 +1,40 @@
 version: "3.8"
-
 services:
   api:
     build:
       context: ./app
     ports:
-      - "5000:5000"
+      - "8000:8000"
     environment:
-      - ENV=dev                     # 👈 Ambiente atual (mude para prod se necessário)
+      - ENV=dev
       - AWS_REGION=us-east-1
       - MODEL_PLUG_URL=http://model-server-plug:8501/v1/models/plug
-      - MODEL_LAMPADA_URL=http://model-server-lampada:8501/v1/models/lampada
+      - MODEL_LAMP_URL=http://model-server-lamp:8501/v1/models/lamp
     depends_on:
       - model-server-plug
-      - model-server-lampada
+      - model-server-lamp
     networks:
       - ia_net
-    # volumes:
-    #   - ~/.aws:/root/.aws:ro  # opcional para testes locais com credenciais
 
   model-server-plug:
     image: tensorflow/serving
     ports:
       - "8501:8501"
     volumes:
-      - ./model-plug:/models/plug
+      - ./app/models/plug:/models/plug
     environment:
       - MODEL_NAME=plug
     networks:
       - ia_net
 
-  model-server-lampada:
+  model-server-lamp:
     image: tensorflow/serving
     ports:
       - "8502:8501"
     volumes:
-      - ./model-lampada:/models/lampada
+      - ./app/models/lamp:/models/lamp
     environment:
-      - MODEL_NAME=lampada
+      - MODEL_NAME=lamp
     networks:
       - ia_net
 
