@@ -2,7 +2,7 @@ import requests
 import json
 
 # ✅ Configuração da API
-API_URL = "http://3.224.60.7:8000"
+API_URL = "http://18.209.78.191:8000"
 API_KEY = "r_VScYSlXJ2dyIweTahbHg0RC-kKtzOqEx5PnFgQP14"
 
 def test_predict(endpoint: str, instances, version=None):
