@@ -1,7 +1,7 @@
 import requests
 
 # ✅ Configuração da API
-API_URL = "http://44.196.159.107:8000"
+API_URL = "http://44.210.27.198:8000"
 API_KEY = "r_VScYSlXJ2dyIweTahbHg0RC-kKtzOqEx5PnFgQP14"
 
 # 🔧 Defina aqui o modelo e a versão a serem testados
