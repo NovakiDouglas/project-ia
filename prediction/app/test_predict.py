@@ -60,7 +60,5 @@ def test_predict(endpoint: str, instances, version=None):
 if __name__ == "__main__":
     if ENDPOINT == "plug":
         test_predict("plug", instances_plug, version=VERSION)
-    elif ENDPOINT == "lamp":
-        test_predict("lamp", instances_lamp, version=VERSION)
     else:
         print("❌ ENDPOINT inválido! Use 'plug' ou 'lamp'.")

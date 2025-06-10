@@ -63,22 +63,6 @@ async def predict_endpoint_plug(request: Request, content: PredictionRequest, ve
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/predict/lamp")
-async def predict_endpoint_lamp(request: Request, content: PredictionRequest, version: str = None):
-    require_api_key(request)
-    try:
-        prediction, carbon_footprint, used_version = predict_lamp(content.instances, version)
-        return {
-            'success': True,
-            'prediction': prediction,
-            'carbon_footprint_kg': carbon_footprint,
-            'version': used_version
-        }
-    except Exception as e:
-        logging.exception("Erro ao processar previsão de lâmpada")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
