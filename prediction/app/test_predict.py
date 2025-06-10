@@ -1,7 +1,7 @@
 import requests
 
 # ✅ Configuração da API
-API_URL = "http://44.210.27.198:8000"
+API_URL = "http://54.235.184.185:8000"
 API_KEY = "r_VScYSlXJ2dyIweTahbHg0RC-kKtzOqEx5PnFgQP14"
 
 # 🔧 Defina aqui o modelo e a versão a serem testados
@@ -11,7 +11,7 @@ VERSION = 1         # ou None para latest
 # 🔌 Entrada para o modelo de plug
 instances_plug = [
     [2, 123.4, 110.0, 15.2],
-    [5, 130.0, 129.0, 8.3]
+    [6, 1.679111, 1.755, 1.030035]
 ]
 
 # 💡 Entrada para o modelo de lâmpada
