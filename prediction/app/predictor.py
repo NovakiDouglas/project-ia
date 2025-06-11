@@ -46,3 +46,5 @@ def predict_model(instances, model_base_url, version=None):
 def predict_plug(instances, version=None):
     return predict_model(instances, MODEL_PLUG_BASE, version)
 
+
+

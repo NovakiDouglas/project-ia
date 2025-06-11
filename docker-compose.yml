@@ -14,7 +14,7 @@ services:
 #      - MODEL_LAMP_URL=http://model-server-lamp:8501/v1/models/lamp
     depends_on:
       - model-server-plug
-      - model-server-lamp
+#      - model-server-lamp
     networks:
       - ia_net
 
