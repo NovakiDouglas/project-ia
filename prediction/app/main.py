@@ -5,7 +5,7 @@ import logging
 from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI, Request, HTTPException
 from pydantic import BaseModel
-from predictor import predict_plug, predict_lamp
+from predictor import predict_plug
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("predictor-api")
