@@ -12,7 +12,7 @@ logger = logging.getLogger("predictor-api")
 
 ENV = os.getenv("ENV", "dev")
 SECRET_NAME = f"api_key_rotation-{ENV}"
-REGION_NAME = os.getenv("AWS_REGION", "us-east-1")
+REGION_NAME = os.getenv("AWS_REGION", "sa-east-1")
 
 app = FastAPI()
 

@@ -1,7 +1,7 @@
 # Define a região da AWS onde os recursos serão criados
 variable "aws_region" {
   description = "Região da AWS"
-  default     = "us-east-1"
+  default     = "sa-east-1"
 }
 
 # Define o tipo de instância EC2

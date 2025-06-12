@@ -9,7 +9,7 @@ services:
       - "8000:8000"
     environment:
       - ENV=dev
-      - AWS_REGION=us-east-1
+      - AWS_REGION=sa-east-1
       - MODEL_PLUG_URL=http://model-server-plug:8501/v1/models/plug
 #      - MODEL_LAMP_URL=http://model-server-lamp:8501/v1/models/lamp
     depends_on:
