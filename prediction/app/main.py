@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI, Request, HTTPException
 from pydantic import BaseModel
 from predictor import predict_plug
+from predictor import predict_lamp
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("predictor-api")
@@ -18,6 +19,13 @@ app = FastAPI()
 
 class PredictionRequest(BaseModel):
     instances: list
+
+class SingleLampInstance(BaseModel):
+    num_feats: list[float]
+    prod_id: int
+
+class LampPredictionRequest(BaseModel):
+    instances: list[SingleLampInstance]
 
 def get_api_keys():
     client = boto3.client("secretsmanager", region_name=REGION_NAME)
@@ -60,6 +68,22 @@ async def predict_endpoint_plug(request: Request, content: PredictionRequest, ve
         }
     except Exception as e:
         logging.exception("Erro ao processar previsão de plug")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/predict/lamp")
+async def predict_endpoint_lamp(request: Request, content: LampPredictionRequest, version: str = None):
+    require_api_key(request)
+    try:
+        payload = [inst.dict() for inst in content.instances]  # transforma para lista de dicionários
+        prediction, carbon_footprint, used_version = predict_lamp(payload, version)
+        return {
+            'success': True,
+            'prediction': prediction,
+            'carbon_footprint_kg': carbon_footprint,
+            'version': used_version
+        }
+    except Exception as e:
+        logging.exception("Erro ao processar previsão de lamp")
         raise HTTPException(status_code=500, detail=str(e))
 
 
