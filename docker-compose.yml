@@ -11,7 +11,7 @@ services:
       - ENV=dev
       - AWS_REGION=sa-east-1
       - MODEL_PLUG_URL=http://model-server-plug:8501/v1/models/plug
-      - MODEL_LAMP_URL=http://model-server-lamp:8501/v1/models/lamp
+      - MODEL_LAMP_URL=http://model-server-lamp:8502/v1/models/lamp
     depends_on:
       - model-server-plug
       - model-server-lamp
