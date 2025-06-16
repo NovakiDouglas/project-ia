@@ -49,19 +49,38 @@ def predict_plug(instances, version=None):
 
 def predict_lamp(payload_list, version=None):
     try:
+        # 1) Converter cada valor para float
         parsed = [[float(val) for val in row] for row in payload_list]
+
+        # 2) Separar num_feats (todas as colunas menos a última) e prod_id (última coluna)
+        num_feats = [row[:-1] for row in parsed]
+        prod_ids  = [int(row[-1]) for row in parsed]
+
+        # 3) Montar URL de predição, possivelmente incluindo versão
         version_path = f"/versions/{version}" if version else ""
         url = f"{MODEL_LAMP_BASE}{version_path}:predict"
-
         logger.info(f"Requisição para: {url}")
-        response = requests.post(url, json={"instances": parsed}, timeout=10)
+
+        # 4) Enviar JSON com dois tensores nomeados ("inputs")
+        payload = {
+            "inputs": {
+                "num_feats": num_feats,
+                "prod_id":   prod_ids
+            }
+        }
+        response = requests.post(url, json=payload, timeout=10)
         response.raise_for_status()
 
+        # 5) Extrair previsões e calcular pegada de carbono
         prediction = np.array(response.json()["predictions"]).flatten()
         used_version = version or get_latest_version(MODEL_LAMP_BASE)
-        carbon_footprint = [round(val * EMISSION_FACTOR_KG_PER_MWH, 3) for val in prediction]
+        carbon_footprint = [
+            round(val * EMISSION_FACTOR_KG_PER_MWH, 3)
+            for val in prediction
+        ]
 
         return prediction.tolist(), carbon_footprint, used_version
+
     except Exception as e:
         logger.error(f"Erro na predição com o modelo {MODEL_LAMP_BASE}: {e}")
         raise RuntimeError(f"Erro na predição: {e}")
