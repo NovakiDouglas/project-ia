@@ -74,7 +74,10 @@ async def predict_endpoint_plug(request: Request, content: PredictionRequest, ve
 async def predict_endpoint_lamp(request: Request, content: LampPredictionRequest, version: str = None):
     require_api_key(request)
     try:
-        payload = [inst.dict() for inst in content.instances]  # transforma para lista de dicionários
+        payload = [
+            inst.num_feats + [inst.prod_id]
+            for inst in content.instances
+        ]
         prediction, carbon_footprint, used_version = predict_lamp(payload, version)
         return {
             'success': True,

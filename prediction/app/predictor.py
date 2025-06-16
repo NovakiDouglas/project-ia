@@ -53,20 +53,18 @@ def predict_lamp(payload_list, version=None):
         url = f"{MODEL_LAMP_BASE}{version_path}:predict"
 
         logger.info(f"Requisição para: {url}")
-        
-        # Aqui mantemos o payload como lista de dicionários, conforme esperado
         response = requests.post(url, json={"instances": payload_list}, timeout=10)
         response.raise_for_status()
 
         prediction = np.array(response.json()["predictions"]).flatten()
         used_version = version or get_latest_version(MODEL_LAMP_BASE)
-
         carbon_footprint = [round(val * EMISSION_FACTOR_KG_PER_MWH, 3) for val in prediction]
 
         return prediction.tolist(), carbon_footprint, used_version
     except Exception as e:
         logger.error(f"Erro na predição com o modelo {MODEL_LAMP_BASE}: {e}")
         raise RuntimeError(f"Erro na predição: {e}")
+
 
 
 
