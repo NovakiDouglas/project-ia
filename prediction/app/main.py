@@ -25,7 +25,7 @@ class SingleLampInstance(BaseModel):
     prod_id: int
 
 class LampPredictionRequest(BaseModel):
-    instances: list[SingleLampInstance]
+    instances: list
 
 def get_api_keys():
     client = boto3.client("secretsmanager", region_name=REGION_NAME)
@@ -74,10 +74,11 @@ async def predict_endpoint_plug(request: Request, content: PredictionRequest, ve
 async def predict_endpoint_lamp(request: Request, content: LampPredictionRequest, version: str = None):
     require_api_key(request)
     try:
-        payload = [
-            inst.num_feats + [inst.prod_id]
-            for inst in content.instances
-        ]
+        # payload = [
+        #     inst.num_feats + [inst.prod_id]
+        #     for inst in content.instances
+        # ]
+        payload = content.instances
         prediction, carbon_footprint, used_version = predict_lamp(payload, version)
         return {
             'success': True,

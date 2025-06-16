@@ -49,11 +49,12 @@ def predict_plug(instances, version=None):
 
 def predict_lamp(payload_list, version=None):
     try:
+        parsed = [[float(val) for val in row] for row in payload_list]
         version_path = f"/versions/{version}" if version else ""
         url = f"{MODEL_LAMP_BASE}{version_path}:predict"
 
         logger.info(f"Requisição para: {url}")
-        response = requests.post(url, json={"instances": payload_list}, timeout=10)
+        response = requests.post(url, json={"instances": parsed}, timeout=10)
         response.raise_for_status()
 
         prediction = np.array(response.json()["predictions"]).flatten()
