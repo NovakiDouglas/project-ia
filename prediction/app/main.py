@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI, Request, HTTPException
 from pydantic import BaseModel
 
-from predictor import predict_plug, predict_lamp
+from predictor import predict_plug, predict_lamp  # já preparado para converter
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("predictor-api")
@@ -24,8 +24,8 @@ class PredictionRequest(BaseModel):
 
 
 class SingleLampInstance(BaseModel):
-    num_input: list[float]
-    prod_input: list[int]
+    num_input: list[float]   # 10 floats: dow, week, month, lag_1…lag_7
+    product_id: str          # o ID “bruto” vindo do cliente
 
 
 class LampPredictionRequest(BaseModel):
@@ -41,17 +41,14 @@ def get_api_keys():
 def is_valid_key(key: str) -> bool:
     secret = get_api_keys()
     now = datetime.now(timezone.utc)
-
     if key == secret.get("current"):
         return True
-
     if key == secret.get("previous"):
         last_rotation = datetime.fromisoformat(
             secret["last_rotation"].replace("Z", "+00:00")
         )
         if now <= last_rotation + timedelta(days=1):
             return True
-
     return False
 
 
@@ -92,7 +89,8 @@ async def predict_endpoint_lamp(
 ):
     require_api_key(request)
     try:
-        # Cada instância já vem como {"num_input": [...], "prod_input": [...]}
+        # Repassa ao predictor uma lista de dicts:
+        # { "num_input": [...], "product_id": "abc123" }
         payload = [inst.dict() for inst in content.instances]
         prediction, carbon_footprint, used_version = predict_lamp(payload, version)
         return {
